@@ -100,6 +100,12 @@ class TableCalendar<T> extends StatefulWidget {
   /// even if the content would fit in less.
   final bool sixWeekMonthsEnforced;
 
+  /// Determines the mode of six-weeks display in `CalendarFormat.month` format.
+  /// Use `SixWeeksMode.start` to display the first week in the month, 
+  /// and `SixWeeksMode.end` to display the last week in the month.
+  /// Defaults to sixWeeksMode.end.
+  final SixWeeksMode sixWeeksMode;
+
   /// When set to true, `TableCalendar` will fill available height.
   final bool shouldFillViewport;
 
@@ -226,6 +232,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.pageJumpingEnabled = false,
     this.pageAnimationEnabled = true,
     this.sixWeekMonthsEnforced = false,
+    this.sixWeeksMode = SixWeeksMode.end,
     this.shouldFillViewport = false,
     this.weekNumbersVisible = false,
     this.rowHeight = 52.0,
@@ -504,6 +511,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             availableCalendarFormats: widget.availableCalendarFormats,
             simpleSwipeConfig: widget.simpleSwipeConfig,
             sixWeekMonthsEnforced: widget.sixWeekMonthsEnforced,
+            sixWeeksMode: widget.sixWeeksMode,
             onVerticalSwipe: _swipeCalendarFormat,
             onPageChanged: (focusedDay) {
               _focusedDay.value = focusedDay;

@@ -18,6 +18,7 @@ class CalendarCore extends StatelessWidget {
   final DayBuilder? weekNumberBuilder;
   final FocusedDayBuilder dayBuilder;
   final bool sixWeekMonthsEnforced;
+  final SixWeeksMode sixWeeksMode;
   final bool dowVisible;
   final bool weekNumbersVisible;
   final Decoration? dowDecoration;
@@ -49,6 +50,7 @@ class CalendarCore extends StatelessWidget {
     this.focusedDay,
     this.previousIndex,
     this.sixWeekMonthsEnforced = false,
+    this.sixWeeksMode = SixWeeksMode.end,
     this.dowVisible = true,
     this.weekNumberBuilder,
     required this.weekNumbersVisible,
@@ -245,11 +247,17 @@ class CalendarCore extends StatelessWidget {
   DateTimeRange _daysInMonth(DateTime focusedDay) {
     final first = _firstDayOfMonth(focusedDay);
     final daysBefore = _getDaysBefore(first);
-    final firstToDisplay = first.subtract(Duration(days: daysBefore));
+    DateTime firstToDisplay = first.subtract(Duration(days: daysBefore));
 
     if (sixWeekMonthsEnforced) {
-      final end = firstToDisplay.add(const Duration(days: 42));
-      return DateTimeRange(start: firstToDisplay, end: end);
+      if (sixWeeksMode == SixWeeksMode.end) {
+        final end = firstToDisplay.add(const Duration(days: 42));
+        return DateTimeRange(start: firstToDisplay, end: end);
+      } else {
+        firstToDisplay = firstToDisplay.subtract(const Duration(days: 7));
+        final end = firstToDisplay.add(const Duration(days: 42));
+        return DateTimeRange(start: firstToDisplay, end: end);
+      }
     }
 
     final last = _lastDayOfMonth(focusedDay);
