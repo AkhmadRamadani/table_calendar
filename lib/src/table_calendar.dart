@@ -56,6 +56,11 @@ class TableCalendar<T> extends StatefulWidget {
   /// Days after it will use `disabledStyle` and trigger `onDisabledDayTapped` callback.
   final DateTime lastDay;
 
+  /// estimatedFirstDay is used to calculate the number of days before the first day of the month.
+  /// It's used when the first day of the month is not the same as the first day of the week.
+  /// Defaults to `firstDay`.
+  final int? estimatedFirstDate;
+
   /// DateTime that will be treated as today. Defaults to `DateTime.now()`.
   ///
   /// Overriding this property might be useful for testing.
@@ -101,7 +106,7 @@ class TableCalendar<T> extends StatefulWidget {
   final bool sixWeekMonthsEnforced;
 
   /// Determines the mode of six-weeks display in `CalendarFormat.month` format.
-  /// Use `SixWeeksMode.start` to display the first week in the month, 
+  /// Use `SixWeeksMode.start` to display the first week in the month,
   /// and `SixWeeksMode.end` to display the last week in the month.
   /// Defaults to sixWeeksMode.end.
   final SixWeeksMode sixWeeksMode;
@@ -217,6 +222,7 @@ class TableCalendar<T> extends StatefulWidget {
     required DateTime firstDay,
     required DateTime lastDay,
     DateTime? currentDay,
+    this.estimatedFirstDate,
     this.locale,
     this.rangeStartDay,
     this.rangeEndDay,
@@ -495,6 +501,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             availableGestures: widget.availableGestures,
             firstDay: widget.firstDay,
             lastDay: widget.lastDay,
+            estimatedFirstDate: widget.estimatedFirstDate,
             startingDayOfWeek: widget.startingDayOfWeek,
             dowDecoration: widget.daysOfWeekStyle.decoration,
             rowDecoration: widget.calendarStyle.rowDecoration,

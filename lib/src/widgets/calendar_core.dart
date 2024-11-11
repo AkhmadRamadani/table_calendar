@@ -13,6 +13,7 @@ class CalendarCore extends StatelessWidget {
   final DateTime? focusedDay;
   final DateTime firstDay;
   final DateTime lastDay;
+  final int? estimatedFirstDate;
   final CalendarFormat calendarFormat;
   final DayBuilder? dowBuilder;
   final DayBuilder? weekNumberBuilder;
@@ -42,6 +43,7 @@ class CalendarCore extends StatelessWidget {
     required this.firstDay,
     required this.lastDay,
     required this.constraints,
+    this.estimatedFirstDate,
     this.dowHeight,
     this.rowHeight,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
@@ -312,7 +314,21 @@ class CalendarCore extends StatelessWidget {
   }
 
   int _getDaysBefore(DateTime firstDay) {
-    return (firstDay.weekday + 7 - getWeekdayNumber(startingDayOfWeek)) % 7;
+    if (estimatedFirstDate == null) {
+      return (firstDay.weekday + 7 - getWeekdayNumber(startingDayOfWeek)) % 7;
+    }
+
+    DateTime estimatedFirstDay =
+        DateTime(firstDay.year, firstDay.month - 1, estimatedFirstDate!);
+
+    final initialDifference = firstDay.difference(estimatedFirstDay).inDays;
+
+    final targetWeekday = getWeekdayNumber(startingDayOfWeek);
+
+    final estimatedDate = firstDay.subtract(Duration(days: initialDifference));
+    final daysToAdjust = (estimatedDate.weekday - targetWeekday + 7) % 7;
+
+    return initialDifference + daysToAdjust;
   }
 
   int _getDaysAfter(DateTime lastDay) {
